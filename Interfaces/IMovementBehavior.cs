@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InterfVSAbstVCompDemo
+namespace InterfVSAbstVCompDemo.Interfaces
 {
-    internal interface ISoundableAndAgeCalculable : ISoundable, IAgeCalculable
+    public interface IMovementBehavior
     {
+        public void Move(string name);
     }
 }

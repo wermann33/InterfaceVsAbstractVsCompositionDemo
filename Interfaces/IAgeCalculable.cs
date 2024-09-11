@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InterfVSAbstVCompDemo
+namespace InterfVSAbstVCompDemo.Interfaces
 {
-    public interface IMovementBehavior
+    public interface IAgeCalculable
     {
-        public void Move(string name);
+        int CalculateAge();
     }
 }

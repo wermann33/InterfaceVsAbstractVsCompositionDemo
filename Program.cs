@@ -1,4 +1,7 @@
-﻿namespace InterfVSAbstVCompDemo;
+﻿using InterfVSAbstVCompDemo.Abstracts;
+using InterfVSAbstVCompDemo.Classes;
+
+namespace InterfVSAbstVCompDemo;
 
 public class Program
 {

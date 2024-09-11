@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using InterfVSAbstVCompDemo.Interfaces;
 
-namespace InterfVSAbstVCompDemo
+namespace InterfVSAbstVCompDemo.Abstracts
 {
     // Abstrakte Klasse Animal
     public abstract class Animal : ISoundableAndAgeCalculable
@@ -28,7 +29,7 @@ namespace InterfVSAbstVCompDemo
         {
             Console.WriteLine("Animal: " + Name);
             Console.WriteLine("Species: " + Species);
-            MovementBehavior?.Move(Name); 
+            MovementBehavior?.Move(Name);
         }
 
         public int CalculateAge()

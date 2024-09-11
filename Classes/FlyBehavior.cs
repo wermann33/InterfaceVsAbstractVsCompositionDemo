@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InterfVSAbstVCompDemo.Interfaces;
 
-namespace InterfVSAbstVCompDemo
+namespace InterfVSAbstVCompDemo.Classes
 {
-
-    public class SwimBehavior : IMovementBehavior
+    public class FlyBehavior : IMovementBehavior
     {
         public void Move(string name)
         {
-            Console.WriteLine(name + " is swimming!");
+            Console.WriteLine(name + " is flying!");
         }
     }
 }

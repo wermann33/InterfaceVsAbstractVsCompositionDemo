@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InterfVSAbstVCompDemo.Abstracts;
+using InterfVSAbstVCompDemo.Interfaces;
 
-namespace InterfVSAbstVCompDemo
+namespace InterfVSAbstVCompDemo.Classes
 {
-    // Spezifische Implementierung für Cat
-    public class Cat : Animal
+    // Spezifische Implementierung für Dog
+    public class Dog : Animal
     {
-        public Cat(string name, DateTime birthDate, IMovementBehavior movementBehavior)
-            : base(name, "Cat", birthDate)
+        public Dog(string name, DateTime birthDate, IMovementBehavior? movementBehavior)
+            : base(name, "Dog", birthDate)
         {
             MovementBehavior = movementBehavior;
         }
 
         public override void MakeSound()
         {
-            Console.WriteLine(Name + " says: Meow!");
+            Console.WriteLine(Name + " says: Woof Woof!");
         }
 
         public override void Display()
