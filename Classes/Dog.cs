@@ -11,8 +11,8 @@ namespace InterfVSAbstVCompDemo.Classes
     // Spezifische Implementierung für Dog
     public class Dog : Animal
     {
-        public Dog(string name, DateTime birthDate, IMovementBehavior? movementBehavior)
-            : base(name, "Dog", birthDate)
+        public Dog(string name, DateTime birthDate, IMovementBehavior? movementBehavior, ElementType element)
+            : base(name, "Dog", birthDate, element)
         {
             MovementBehavior = movementBehavior;
         }

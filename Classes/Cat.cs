@@ -11,8 +11,8 @@ namespace InterfVSAbstVCompDemo.Classes
     // Spezifische Implementierung für Cat
     public class Cat : Animal
     {
-        public Cat(string name, DateTime birthDate, IMovementBehavior movementBehavior)
-            : base(name, "Cat", birthDate)
+        public Cat(string name, DateTime birthDate, IMovementBehavior movementBehavior, ElementType element)
+            : base(name, "Cat", birthDate, element)
         {
             MovementBehavior = movementBehavior;
         }
