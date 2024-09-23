@@ -9,7 +9,7 @@ using InterfVSAbstVCompDemo.Interfaces;
 
 
 
-namespace InterfVSAbstVCompDemo.Abstracts
+namespace InterfVSAbstVCompDemo.BusinessLayer.Abstracts
 {
     public enum ElementType
     {

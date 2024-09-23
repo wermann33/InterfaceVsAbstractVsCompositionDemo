@@ -1,7 +1,7 @@
-﻿using InterfVSAbstVCompDemo.Abstracts;
-using InterfVSAbstVCompDemo.Classes;
+﻿using InterfVSAbstVCompDemo.BusinessLayer.Abstracts;
+using InterfVSAbstVCompDemo.BusinessLayer.Models;
 
-namespace InterfVSAbstVCompDemo;
+namespace InterfVSAbstVCompDemo.PresentationLayer;
 
 public class Program
 {

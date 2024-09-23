@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InterfVSAbstVCompDemo.Interfaces;
 
-namespace InterfVSAbstVCompDemo.Classes
+namespace InterfVSAbstVCompDemo.BusinessLayer.Models
 {
     public class FlyBehavior : IMovementBehavior
     {

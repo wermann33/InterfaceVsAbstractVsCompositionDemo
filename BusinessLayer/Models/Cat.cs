@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using InterfVSAbstVCompDemo.Abstracts;
+using InterfVSAbstVCompDemo.BusinessLayer.Abstracts;
 using InterfVSAbstVCompDemo.Interfaces;
 
-namespace InterfVSAbstVCompDemo.Classes
+namespace InterfVSAbstVCompDemo.BusinessLayer.Models
 {
     // Spezifische Implementierung für Cat
     public class Cat : Animal

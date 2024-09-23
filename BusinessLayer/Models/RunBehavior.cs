@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using InterfVSAbstVCompDemo.Interfaces;
 
-namespace InterfVSAbstVCompDemo.Classes
+namespace InterfVSAbstVCompDemo.BusinessLayer.Models
 {
-
-    public class SwimBehavior : IMovementBehavior
+    internal class RunBehavior : IMovementBehavior
     {
         public void Move(string name)
         {
-            Console.WriteLine(name + " is swimming!");
+            Console.WriteLine(name + " is running!");
         }
     }
 }
