@@ -23,7 +23,7 @@ namespace InterfVSAbstVCompDemo.BusinessLayer.Abstracts
     public abstract class Animal : ISoundableAndAgeCalculable
     {
         public string Name { get; protected set; }
-        protected string Species { get; set; }
+        public string Species { get; protected set; }
         protected DateTime BirthDate { get; set; }
         public ElementType Element { get; set; }
 
