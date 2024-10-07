@@ -27,7 +27,7 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
             {
                 // Akzeptiere eingehende TCP-Verbindungen
                 using TcpClient client = listener.AcceptTcpClient();
-                using NetworkStream stream = client.GetStream();
+                using NetworkStream? stream = client.GetStream();
 
                 // Erstellt einen Puffer (ein Array von Bytes), um die eingehenden Daten zu speichern.
                 // Die Größe des Puffers wird basierend auf der maximalen Empfangsgröße des Clients festgelegt.
@@ -40,8 +40,10 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
                 string httpMethod = requestLines[0].Split(' ')[0]; // Erhalte die HTTP-Methode (GET, POST, DELETE)
                 string requestUrl = requestLines[0].Split(' ')[1]; // Erhalte die URL der Anfrage
 
-                // Verarbeite die Anfrage und generiere eine Antwort
-                string responseString = _requestHandler.HandleRequest(requestUrl, httpMethod);
+                // Parse Body for POST requests
+                string jsonBody = httpMethod == "POST" ? request.Split("\r\n\r\n")[1] : null;
+
+                string responseString = _requestHandler.HandleRequest(requestUrl, httpMethod, jsonBody);
 
                 // Erstelle eine HTTP-Antwort und sende diese zurück
                 byte[] responseBuffer = Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Length: {responseString.Length}\r\n\r\n{responseString}");

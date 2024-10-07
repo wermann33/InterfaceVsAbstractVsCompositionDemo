@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using InterfVSAbstVCompDemo.Interfaces;
-
-
+﻿using InterfVSAbstVCompDemo.Interfaces;
 
 namespace InterfVSAbstVCompDemo.BusinessLayer.Abstracts
 {
@@ -24,14 +15,17 @@ namespace InterfVSAbstVCompDemo.BusinessLayer.Abstracts
     {
         public string Name { get; protected set; }
         public string Species { get; protected set; }
-        protected DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; protected set; }
         public ElementType Element { get; set; }
 
         // Neues Bewegungsverhalten durch Komposition
         public IMovementBehavior MovementBehavior { get; set; }
 
+        public string MovementType => MovementBehavior?.GetType().Name ?? "Unknown";
+
+
         /// <summary>
-        /// ANimal-Konstruktor
+        /// Animal-Konstruktor
         /// </summary>
         /// <param name="name">Name des Animals (string)</param>
         /// <param name="species">Species des Animals (string)</param>

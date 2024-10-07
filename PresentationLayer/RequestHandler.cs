@@ -1,80 +1,84 @@
 ﻿using InterfVSAbstVCompDemo.BusinessLayer.Abstracts;
+using InterfVSAbstVCompDemo.BusinessLayer.DTO;
 using InterfVSAbstVCompDemo.BusinessLayer.Models;
 using InterfVSAbstVCompDemo.DAL;
 using InterfVSAbstVCompDemo.Interfaces;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Web;
+using System.Xml.Linq;
 
 namespace InterfVSAbstVCompDemo.PresentationLayer
 {
     // Diese Klasse verarbeitet die eingehenden Anfragen und gibt entsprechende Antworten zurück
     public class RequestHandler(IRepository animalRepository)
     {
-        public string HandleRequest(string request, string httpMethod)
+        private readonly AnimalRepository _animalRepository = AnimalRepository.Instance;
+        public string HandleRequest(string request, string httpMethod, string? jsonBody)
         {
-            // Unterscheidung nach HTTP-Methode
-            if (httpMethod == "GET" && request == "/animals")
             {
-                return GetAnimals();
-            }
-
-            if (httpMethod == "POST" && request.StartsWith("/addCat"))
-            {
-                // Extrahiere Parameter (Name, Element, Bewegung, Geburtsdatum)
-                string? name = ExtractQueryParam(request, "name");
-                string? element = ExtractQueryParam(request, "element");
-                string? movement = ExtractQueryParam(request, "movement");
-                string? birthDate = ExtractQueryParam(request, "birthdate");
-
-                if (string.IsNullOrWhiteSpace(name))
+                if (httpMethod == "GET" && request == "/animals")
                 {
-                    return "Error: Missing 'name' parameter for cat.";
+                    return GetAnimals();
                 }
 
-                ElementType elementType = ParseElementType(element);
-                IMovementBehavior movementBehavior = ParseMovementBehavior(movement);
-                DateTime birth = string.IsNullOrWhiteSpace(birthDate) ? DateTime.Now : DateTime.Parse(birthDate);
-
-                animalRepository.AddAnimal(new Cat(name, birth, movementBehavior, elementType));
-                return $"Cat '{name}' added successfully.";
-            }
-
-            if (httpMethod == "POST" && request.StartsWith("/addDog"))
-            {
-                // Extrahiere Parameter (Name, Element, Bewegung, Geburtsdatum)
-                string? name = ExtractQueryParam(request, "name");
-                string? element = ExtractQueryParam(request, "element");
-                string? movement = ExtractQueryParam(request, "movement");
-                string? birthDate = ExtractQueryParam(request, "birthdate");
-
-                if (string.IsNullOrWhiteSpace(name))
+                // Unterscheidung zwischen Cat und Dog für POST-Anfragen
+                if (httpMethod == "POST" && request.StartsWith("/addCat"))
                 {
-                    return "Error: Missing 'name' parameter for dog.";
+                    return HandleAnimalPost(jsonBody, "cat");
                 }
 
-                ElementType elementType = ParseElementType(element);
-                IMovementBehavior movementBehavior = ParseMovementBehavior(movement);
-                DateTime birth = string.IsNullOrWhiteSpace(birthDate) ? DateTime.Now : DateTime.Parse(birthDate);
-
-                animalRepository.AddAnimal(new Dog(name, birth, movementBehavior, elementType));
-                return $"Dog '{name}' added successfully.";
-            }
-
-            if (httpMethod == "DELETE" && request.StartsWith("/deleteAnimal"))
-            {
-                // Extrahiere den Namen aus der Anfrage (z.B. /deleteAnimal?name=Whiskers)
-                string? name = ExtractQueryParam(request, "name");
-                if (string.IsNullOrWhiteSpace(name))
+                if (httpMethod == "POST" && request.StartsWith("/addDog"))
                 {
-                    return "Error: Missing 'name' parameter for delete.";
+                    return HandleAnimalPost(jsonBody, "dog");
                 }
 
-                var success = animalRepository.RemoveAnimalByName(name);
-                return success ? $"Animal '{name}' deleted successfully." : $"Animal '{name}' not found.";
+                if (httpMethod == "DELETE" && request.StartsWith("/deleteAnimal"))
+                {
+                    string? name = ExtractQueryParam(request, "name");
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        return "Error: Missing 'name' parameter for delete.";
+                    }
+
+                    var success = _animalRepository.RemoveAnimalByName(name);
+                    return success ? $"Animal '{name}' deleted successfully." : $"Animal '{name}' not found.";
+                }
+
+                return "Unknown request.";
+            }
+        }
+
+        private string HandleAnimalPost(string? jsonBody, string speciesType)
+        {
+            if (string.IsNullOrWhiteSpace(jsonBody))
+            {
+                return "Error: No JSON body provided.";
             }
 
-            return "Unknown request.";
+            var newAnimalDto = JsonSerializer.Deserialize<AnimalDto>(jsonBody);
+
+            if (string.IsNullOrWhiteSpace(newAnimalDto.Name))
+            {
+                return "Error: 'Name' field is required.";
+            }
+
+            ElementType elementType = ParseElementType(newAnimalDto.Element);
+            IMovementBehavior movementBehavior = ParseMovementBehavior(newAnimalDto.Movement);
+            DateTime birth = string.IsNullOrWhiteSpace(newAnimalDto.BirthDate) ? DateTime.Now : DateTime.Parse(newAnimalDto.BirthDate);
+
+            if (speciesType == "cat")
+            {
+                _animalRepository.AddAnimal(new Cat(newAnimalDto.Name, birth, movementBehavior, elementType));
+                return $"Cat '{newAnimalDto.Name}' added successfully.";
+            } else
+            {
+                _animalRepository.AddAnimal(new Dog(newAnimalDto.Name, birth, movementBehavior, elementType));
+                return $"Dog '{newAnimalDto.Name}' added successfully.";
+            }
         }
 
         // Hilfsfunktion zur Extraktion von Query-Parametern aus der URL
@@ -88,19 +92,24 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
         // Methode zur Ausgabe aller Tiere
         private string GetAnimals()
         {
-            var animals = animalRepository.GetAllAnimals();
-            if (!animals.Any())
+            var animals = _animalRepository.GetAllAnimals();
+            
+            var animalDtos = animals.Select(animal => new AnimalDto
             {
-                return "No animals found.";
-            }
+                Name = animal.Name,
+                Species = animal.Species,
+                Element = animal.Element.ToString(),  // Enum als String
+                Movement = animal.MovementType,       // Bewegungstyp als String
+                BirthDate = animal.BirthDate.ToString("yyyy-MM-dd")  // Datumsformat
+            }).ToList();
 
-            string result = "Animals:\n";
-            foreach (var animal in animals)
+            var options = new JsonSerializerOptions
             {
-                result += $"{animal.GetType().Name}: {animal.Name}, Age: {animal.CalculateAge()} years, " +
-                          $"Element: {animal.Element}, Movement: {animal.MovementBehavior.GetType().Name}\n";
-            }
-            return result;
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter() }  // Enum-Konvertierung
+            };
+
+            return JsonSerializer.Serialize(animalDtos, options);
         }
 
         // Hilfsfunktion zur Konvertierung von Element-Strings zu ElementType
