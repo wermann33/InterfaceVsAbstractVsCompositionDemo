@@ -14,9 +14,9 @@ using System.Xml.Linq;
 namespace InterfVSAbstVCompDemo.PresentationLayer
 {
     // Diese Klasse verarbeitet die eingehenden Anfragen und gibt entsprechende Antworten zurück
-    public class RequestHandler(IRepository animalRepository)
+    public class RequestHandler()
     {
-        private readonly AnimalRepository _animalRepository = AnimalRepository.Instance;
+        private readonly AnimalRepository _animalRepository = new(); 
         public string HandleRequest(string request, string httpMethod, string? jsonBody)
         {
             {

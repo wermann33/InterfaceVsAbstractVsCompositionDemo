@@ -12,8 +12,7 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
 
         public Server()
         {
-            var animalRepository = new AnimalRepository();
-            _requestHandler = new RequestHandler(animalRepository);
+            _requestHandler = new RequestHandler();
         }
 
         public void Start()
