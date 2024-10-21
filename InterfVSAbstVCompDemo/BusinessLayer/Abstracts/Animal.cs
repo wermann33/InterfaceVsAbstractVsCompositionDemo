@@ -33,6 +33,15 @@ namespace InterfVSAbstVCompDemo.BusinessLayer.Abstracts
         /// <param name="element">Element des Animals als Enum</param>
         protected Animal(string name, string species, DateTime birthDate, ElementType element)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Name cannot be null or empty", nameof(name));
+            }
+            if (birthDate > DateTime.Now)
+            {
+                throw new ArgumentException("Birth date cannot be in the future", nameof(birthDate));
+            }
+
             Name = name;
             Species = species;
             BirthDate = birthDate;
@@ -48,6 +57,11 @@ namespace InterfVSAbstVCompDemo.BusinessLayer.Abstracts
 
         public int CalculateAge()
         {
+            if (BirthDate > DateTime.Now)
+            {
+                throw new ArgumentException("Birth date cannot be in the future", nameof(BirthDate));
+            }
+
             return DateTime.Now.Year - BirthDate.Year;
         }
 

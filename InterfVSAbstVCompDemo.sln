@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfVSAbstVCompDemo", "InterfVSAbstVCompDemo.csproj", "{3EF8FCD2-295F-4E19-8C46-A524C960EAB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfVSAbstVCompDemo", "InterfVSAbstVCompDemo\InterfVSAbstVCompDemo.csproj", "{52E8C7B5-F636-41D6-AFB0-564D263E4891}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfVSAbstVCompDemo.Test", "InterfVSAbstVCompDemo.Test\InterfVSAbstVCompDemo.Test.csproj", "{BBA486BF-4F69-49A3-8E32-448424A75F22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3EF8FCD2-295F-4E19-8C46-A524C960EAB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EF8FCD2-295F-4E19-8C46-A524C960EAB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EF8FCD2-295F-4E19-8C46-A524C960EAB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EF8FCD2-295F-4E19-8C46-A524C960EAB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52E8C7B5-F636-41D6-AFB0-564D263E4891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52E8C7B5-F636-41D6-AFB0-564D263E4891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52E8C7B5-F636-41D6-AFB0-564D263E4891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52E8C7B5-F636-41D6-AFB0-564D263E4891}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA486BF-4F69-49A3-8E32-448424A75F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA486BF-4F69-49A3-8E32-448424A75F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA486BF-4F69-49A3-8E32-448424A75F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA486BF-4F69-49A3-8E32-448424A75F22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,13 +3,9 @@ using InterfVSAbstVCompDemo.BusinessLayer.DTO;
 using InterfVSAbstVCompDemo.BusinessLayer.Models;
 using InterfVSAbstVCompDemo.DAL;
 using InterfVSAbstVCompDemo.Interfaces;
-using System.IO;
-using System.Net.Sockets;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
-using System.Xml.Linq;
 
 namespace InterfVSAbstVCompDemo.PresentationLayer
 {
