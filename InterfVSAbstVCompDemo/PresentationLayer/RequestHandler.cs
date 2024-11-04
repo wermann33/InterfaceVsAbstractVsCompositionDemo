@@ -10,45 +10,53 @@ using System.Web;
 namespace InterfVSAbstVCompDemo.PresentationLayer
 {
     // Diese Klasse verarbeitet die eingehenden Anfragen und gibt entsprechende Antworten zurück
-    public class RequestHandler()
+    public class RequestHandler
     {
-        private readonly AnimalRepository _animalRepository = new(); 
-        public string HandleRequest(string request, string httpMethod, string? jsonBody)
+        private readonly IRepository _animalRepository;
+
+        // Standardkonstruktor für die Anwendung ohne Test
+        public RequestHandler() : this(new AnimalRepository()) { }
+
+        // Konstruktor für Tests mit Dependency Injection
+        public RequestHandler(IRepository repository)
         {
-            {
-                if (httpMethod == "GET" && request == "/animals")
-                {
-                    return GetAnimals();
-                }
-
-                // Unterscheidung zwischen Cat und Dog für POST-Anfragen
-                if (httpMethod == "POST" && request.StartsWith("/addCat"))
-                {
-                    return HandleAnimalPost(jsonBody, "cat");
-                }
-
-                if (httpMethod == "POST" && request.StartsWith("/addDog"))
-                {
-                    return HandleAnimalPost(jsonBody, "dog");
-                }
-
-                if (httpMethod == "DELETE" && request.StartsWith("/deleteAnimal"))
-                {
-                    string? name = ExtractQueryParam(request, "name");
-                    if (string.IsNullOrWhiteSpace(name))
-                    {
-                        return "Error: Missing 'name' parameter for delete.";
-                    }
-
-                    var success = _animalRepository.RemoveAnimalByName(name);
-                    return success ? $"Animal '{name}' deleted successfully." : $"Animal '{name}' not found.";
-                }
-
-                return "Unknown request.";
-            }
+            _animalRepository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        private string HandleAnimalPost(string? jsonBody, string speciesType)
+        public string HandleRequest(string request, string httpMethod, string? jsonBody)
+        {
+            if (httpMethod == "GET" && request == "/animals")
+            {
+                return GetAnimals();
+            }
+
+            // Unterscheidung zwischen Cat und Dog für POST-Anfragen
+            if (httpMethod == "POST" && request.StartsWith("/addCat"))
+            {
+                return HandleAnimalPost(jsonBody, "cat");
+            }
+
+            if (httpMethod == "POST" && request.StartsWith("/addDog"))
+            {
+                return HandleAnimalPost(jsonBody, "dog");
+            }
+
+            if (httpMethod == "DELETE" && request.StartsWith("/deleteAnimal"))
+            {
+                string? name = ExtractQueryParam(request, "name");
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return "Error: Missing 'name' parameter for delete.";
+                }
+
+                var success = _animalRepository.RemoveAnimalByName(name);
+                return success ? $"Animal '{name}' deleted successfully." : $"Animal '{name}' not found.";
+            }
+
+            return "Unknown request.";
+        }
+
+        public string HandleAnimalPost(string? jsonBody, string speciesType)
         {
             if (string.IsNullOrWhiteSpace(jsonBody))
             {
@@ -57,7 +65,7 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
 
             var newAnimalDto = JsonSerializer.Deserialize<AnimalDto>(jsonBody);
 
-            if (string.IsNullOrWhiteSpace(newAnimalDto.Name))
+            if (string.IsNullOrWhiteSpace(newAnimalDto?.Name))
             {
                 return "Error: 'Name' field is required.";
             }
@@ -78,7 +86,7 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
         }
 
         // Hilfsfunktion zur Extraktion von Query-Parametern aus der URL
-        private string? ExtractQueryParam(string request, string param)
+        public string? ExtractQueryParam(string request, string param)
         {
             var uri = new Uri("http://localhost:8080" + request);
             var query = HttpUtility.ParseQueryString(uri.Query);

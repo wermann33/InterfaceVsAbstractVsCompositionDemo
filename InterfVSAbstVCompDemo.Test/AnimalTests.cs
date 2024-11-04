@@ -86,6 +86,7 @@ namespace InterfVSAbstVCompDemo.Test
 
             // Act & Assert
             Assert.Throws<ArgumentException>(() => new Cat("FutureCat", birthDate, new RunBehavior(), ElementType.FIRE));
+            Assert.Throws<ArgumentException>(() => new Dog("FutureDog", birthDate, new RunBehavior(), ElementType.FIRE));
         }
 
         // Test für Animal Name null oder leer
@@ -93,7 +94,7 @@ namespace InterfVSAbstVCompDemo.Test
         public void Constructor_ShouldThrowException_WhenNameIsNullOrEmpty()
         {
             // Arrange, Act & Assert
-            Assert.Throws<ArgumentException>(() => new Cat(null, DateTime.Now, new RunBehavior(), ElementType.FIRE));
+            Assert.Throws<ArgumentException>(() => new Cat(null!, DateTime.Now, new RunBehavior(), ElementType.FIRE));
             Assert.Throws<ArgumentException>(() => new Cat(string.Empty, DateTime.Now, new RunBehavior(), ElementType.FIRE));
         }
 
@@ -113,5 +114,71 @@ namespace InterfVSAbstVCompDemo.Test
             Assert.That(result, Does.Contain("Animal: Whiskers"));
             Assert.That(result, Does.Contain("Species: Cat"));
         }
+
+        [Test]
+        public void Dog_Constructor_ShouldInitializePropertiesCorrectly()
+        {
+            // Arrange
+            var birthDate = new DateTime(2020, 1, 1);
+            var movementBehavior = new RunBehavior();
+            var element = ElementType.FIRE;
+
+            // Act
+            var dog = new Dog("Buddy", birthDate, movementBehavior, element);
+
+            // Assert
+            Assert.That(dog.Name, Is.EqualTo("Buddy"));
+            Assert.That(dog.BirthDate, Is.EqualTo(birthDate));
+            Assert.That(dog.MovementBehavior, Is.InstanceOf<RunBehavior>());
+            Assert.That(dog.Element, Is.EqualTo(ElementType.FIRE));
+        }
+
+        [Test]
+        public void CalculateAge_ShouldReturnZero_WhenBirthDateIsToday()
+        {
+            // Arrange
+            var today = DateTime.Now;
+            var movementBehavior = new RunBehavior();
+
+            var cat = new Cat("Kitty", today, movementBehavior, ElementType.EARTH);
+
+            // Act
+            var age = cat.CalculateAge();
+
+            // Assert
+            Assert.That(age, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void CalculateAge_ShouldReturnCorrectAge_WhenBirthDateIsInThePast()
+        {
+            // Arrange
+            var birthDate = new DateTime(2018, 4, 15);
+            var animal = new Dog("Buddy", birthDate, new RunBehavior(), ElementType.EARTH);
+
+            // Act
+            var age = animal.CalculateAge();
+
+            // Assert
+            Assert.That(age, Is.EqualTo(System.DateTime.Now.Year - 2018)); // assuming current year is 2023
+        }
+
+
+        [Test]
+        public void Display_ShouldReturnCorrectFormattedString()
+        {
+            // Arrange
+            using var stringWriter = new StringWriter();
+            Console.SetOut(stringWriter);
+
+            // Act
+            _dog.Display();
+            var result = stringWriter.ToString().Trim();
+
+            // Assert
+            Assert.That(result, Does.Contain("Animal: Buddy"));
+            Assert.That(result, Does.Contain("Species: Dog"));
+        }
+
     }
 }

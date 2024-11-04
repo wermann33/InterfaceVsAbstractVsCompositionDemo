@@ -39,7 +39,7 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
                 string requestUrl = requestLines[0].Split(' ')[1]; // Erhalte die URL der Anfrage
 
                 // Parse Body for POST requests
-                string jsonBody = httpMethod == "POST" ? request.Split("\r\n\r\n")[1] : null;
+                string? jsonBody = httpMethod == "POST" ? request.Split("\r\n\r\n")[1] : null;
 
                 string responseString = _requestHandler.HandleRequest(requestUrl, httpMethod, jsonBody);
 

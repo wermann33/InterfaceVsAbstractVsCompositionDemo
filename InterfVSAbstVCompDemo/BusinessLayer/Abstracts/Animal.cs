@@ -16,10 +16,10 @@ namespace InterfVSAbstVCompDemo.BusinessLayer.Abstracts
         public string Name { get; protected set; }
         public string Species { get; protected set; }
         public DateTime BirthDate { get; protected set; }
-        public ElementType Element { get; set; }
+        public ElementType? Element { get; set; }
 
         // Neues Bewegungsverhalten durch Komposition
-        public IMovementBehavior MovementBehavior { get; set; }
+        public IMovementBehavior? MovementBehavior { get; set; }
 
         public string MovementType => MovementBehavior?.GetType().Name ?? "Unknown";
 
