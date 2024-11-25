@@ -5,13 +5,10 @@ namespace InterfVSAbstVCompDemo.DAL
     // Interface definiert grundlegende Methoden zur Verwaltung von Tieren im Repository
     public interface IRepository
     {
-        // Gibt eine Liste aller Tiere zurück
-        IEnumerable<Animal> GetAllAnimals();
+        Task<IEnumerable<Animal>> GetAllAnimalsAsync();  
 
-        // Fügt ein neues Tier hinzu
-        void AddAnimal(Animal animal);
+        Task AddAnimalAsync(Animal animal);  
 
-        // Entfernt ein Tier basierend auf dem Namen
-        bool RemoveAnimalByName(string name);
+        Task<bool> RemoveAnimalByNameAsync(string name);  
     }
 }

@@ -6,6 +6,7 @@ using InterfVSAbstVCompDemo.Interfaces;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
+using System.Threading.Tasks;
 
 namespace InterfVSAbstVCompDemo.PresentationLayer
 {
@@ -23,22 +24,22 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
             _animalRepository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public string HandleRequest(string request, string httpMethod, string? jsonBody)
+        public async Task<string> HandleRequestAsync(string request, string httpMethod, string? jsonBody)
         {
             if (httpMethod == "GET" && request == "/animals")
             {
-                return GetAnimals();
+                return await GetAnimalsAsync();
             }
 
             // Unterscheidung zwischen Cat und Dog für POST-Anfragen
             if (httpMethod == "POST" && request.StartsWith("/addCat"))
             {
-                return HandleAnimalPost(jsonBody, "cat");
+                return await HandleAnimalPostAsync(jsonBody, "cat");
             }
 
             if (httpMethod == "POST" && request.StartsWith("/addDog"))
             {
-                return HandleAnimalPost(jsonBody, "dog");
+                return await HandleAnimalPostAsync(jsonBody, "dog");
             }
 
             if (httpMethod == "DELETE" && request.StartsWith("/deleteAnimal"))
@@ -49,14 +50,14 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
                     return "Error: Missing 'name' parameter for delete.";
                 }
 
-                var success = _animalRepository.RemoveAnimalByName(name);
+                var success = await _animalRepository.RemoveAnimalByNameAsync(name);
                 return success ? $"Animal '{name}' deleted successfully." : $"Animal '{name}' not found.";
             }
 
             return "Unknown request.";
         }
 
-        public string HandleAnimalPost(string? jsonBody, string speciesType)
+        public async Task<string> HandleAnimalPostAsync(string? jsonBody, string speciesType)
         {
             if (string.IsNullOrWhiteSpace(jsonBody))
             {
@@ -76,11 +77,11 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
 
             if (speciesType == "cat")
             {
-                _animalRepository.AddAnimal(new Cat(newAnimalDto.Name, birth, movementBehavior, elementType));
+                await _animalRepository.AddAnimalAsync(new Cat(newAnimalDto.Name, birth, movementBehavior, elementType));
                 return $"Cat '{newAnimalDto.Name}' added successfully.";
             } else
             {
-                _animalRepository.AddAnimal(new Dog(newAnimalDto.Name, birth, movementBehavior, elementType));
+                await _animalRepository.AddAnimalAsync(new Dog(newAnimalDto.Name, birth, movementBehavior, elementType));
                 return $"Dog '{newAnimalDto.Name}' added successfully.";
             }
         }
@@ -94,10 +95,10 @@ namespace InterfVSAbstVCompDemo.PresentationLayer
         }
 
         // Methode zur Ausgabe aller Tiere
-        private string GetAnimals()
+        private async Task<string> GetAnimalsAsync()
         {
-            var animals = _animalRepository.GetAllAnimals();
-            
+            var animals = await _animalRepository.GetAllAnimalsAsync();
+
             var animalDtos = animals.Select(animal => new AnimalDto
             {
                 Name = animal.Name,
